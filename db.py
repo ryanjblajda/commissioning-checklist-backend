@@ -37,14 +37,14 @@ def get_all_prefixes():
         print(f"get all prefixes from database")
 
         cursor = database.cursor()
-        result = cursor.execute("select * from device_type")
+        result = cursor.execute("select id, prefix, description from device_type ORDER BY prefix ASC")
         results = result.fetchall()
         cursor.close()
 
         payload = []
 
         if results is not None:
-            payload = [{"id": item[0], "name": item[1]} for item in results]
+            payload = [{"id": item[0], "name": item[1], "description":item[2]} for item in results]
         
         if payload.count != 0:
             print(payload)
@@ -69,14 +69,14 @@ def get_all_models():
         print(f"get all models from database")
 
         cursor = database.cursor()
-        result = cursor.execute("select * from device_model")
+        result = cursor.execute("select * from device_model_control_types")
         results = result.fetchall()
         cursor.close()
-
+        
         payload = []
 
         if results is not None:
-            payload = [{"id": item[0], "name": item[1]} for item in results]
+            payload = [{"id": item[2], "name": item[3],  "manufacturer_name":item[1], "manufacturer_id":item[0], "control_type_id":item[4], "control_type_name":item[5]} for item in results]
         
         if payload.count != 0:
             print(payload)
