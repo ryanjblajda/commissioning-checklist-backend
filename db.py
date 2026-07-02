@@ -72,7 +72,7 @@ def get_all_models():
         result = cursor.execute("select * from device_model_control_types")
         results = result.fetchall()
         cursor.close()
-        
+
         payload = []
 
         if results is not None:
@@ -155,7 +155,7 @@ def get_tasks():
         payload = []
 
         if results is not None:
-            payload = [{"id": item[0], "name": item[1]} for item in results]
+            payload = [{"id": item[0], "name": item[1], "description": item[2]} for item in results]
         
         if payload.count != 0:
             print(payload)
