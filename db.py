@@ -11,6 +11,107 @@ databaseWriteInProgress = Event()
 def __get_database_readable():
     return not databaseWriteInProgress.is_set()
 
+def add_device(payload:model.NewDevicePayload):
+    success = False
+    print(payload)
+    if payload.manufacturer_id != 0 and payload.prefix_id != 0:
+        print('waiting to access database')
+        if __get_database_readable():
+            print('checking if desired model exists in the database')
+
+            cursor = database.cursor()
+            result = cursor.execute("select * from device_model dm where dm.model == ?", (payload.model, ))
+            results = result.fetchall()
+
+            if results is not None:
+                if len(results) != 0:
+                    print('model found in database => cannot add')
+                else:
+                    print('no model found => attempting to add new device')
+                    success = True
+        
+                    databaseWriteInProgress.set()
+
+                    added = False
+                    try:
+                        cursor.execute("insert into device_model (manufacturer_id, model, device_type_id) values (?, ?, ?)", (payload.manufacturer_id, payload.model, payload.prefix_id, ))
+                        database.commit()
+                        added = True
+                        print(f"added new device {payload.model}");
+                    except Exception as msg:
+                        database.rollback()
+                        print(msg)
+                    
+                    if added:
+                        id = 0
+
+                        result = cursor.execute("select * from device_model where model = ?", (payload.model, ))
+                        results = result.fetchall()
+                        id = int(results[0][0])
+                        print(f"fetched new device id {id}")
+
+                        if id != 0:
+                            #print(payload.capabilities)
+                            for capability in payload.capabilities:
+                                try:
+                                    cursor.execute("insert into device_model_capability (device_model_id, capability_id) values (?, ?)", (id, capability, ))
+                                    database.commit()
+                                    print(f"added capability {capability}")
+                                except Exception as msg:
+                                    print(f'exception {msg}')
+                                    database.rollback()
+                                    break
+
+                    databaseWriteInProgress.clear()
+    else:
+        print('cannot add device without valid manufacturer and prefix id!')
+
+    return success
+
+def add_capability(payload:model.NewItemPayload):
+    return None, None
+
+def add_prefix(payload:model.NewItemPayload):
+    success = False
+    reason = "unknown"
+    print("add prefix")
+
+    if __get_database_readable():
+        databaseWriteInProgress.set()
+        cursor = database.cursor()
+        try:
+            cursor.execute("insert into device_type (prefix, description) values (?, ?)", (payload.name, payload.description, ))
+            success = True
+        except Exception as msg:
+            reason = str(msg)
+        databaseWriteInProgress.clear()
+    print(f"result: {success} {reason}")
+    return success, reason
+
+def add_model(payload:model.NewItemPayload):
+    success = False
+    reason = "unknown"
+    print("add model")
+    return success, reason
+
+def add_manufacturer(payload:model.NewItemPayload):
+    success = False
+    reason = "unknown"
+    print("add manufacturer")
+    return success, reason
+
+def add_control(payload:model.NewItemPayload):
+    success = False
+    reason = "unknown"
+    print("add control")
+    return success, reason
+
+def add_task(payload:model.NewItemPayload):
+    success = False
+    reason = "unknown"
+    print("add task")
+    return success, reason
+
 def get_capabilities():
     print('waiting to access database')
 
