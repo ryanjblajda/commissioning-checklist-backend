@@ -5,6 +5,9 @@
 import sqlite3
 from threading import Event
 
+import model
+
+databaseWriteInProgress = Event()
 database = sqlite3.Connection('latest.db', autocommit=True, check_same_thread=False)
 databaseWriteInProgress = Event()
 
