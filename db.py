@@ -9,7 +9,7 @@ import model
 
 databaseWriteInProgress = Event()
 database = sqlite3.Connection('latest.db', autocommit=True, check_same_thread=False)
-databaseWriteInProgress = Event()
+
 
 def __get_database_readable():
     return not databaseWriteInProgress.is_set()
