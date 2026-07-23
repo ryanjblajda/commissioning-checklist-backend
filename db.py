@@ -174,7 +174,7 @@ def get_all_models():
         print(f"get all models from database")
 
         cursor = database.cursor()
-        result = cursor.execute("select * from device_model_control_types")
+        result = cursor.execute("SELECT dm.id, dm.manufacturer_id, m.name AS manufacturer_name, dm.model, dm.device_type_id, dt.description as device_type_name FROM device_model dm LEFT JOIN device_manufacturer m ON dm.manufacturer_id = m.id LEFT JOIN device_type dt ON dm.device_type_id = dt.id")
         results = result.fetchall()
         cursor.close()
 
