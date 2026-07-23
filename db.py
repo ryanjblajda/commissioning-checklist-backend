@@ -132,7 +132,8 @@ def get_capabilities():
             payload = [{"id": item[0], "name": item[1]} for item in results]
         
         if payload.count != 0:
-            print(payload)
+            #print(payload)
+            pass
 
     return payload
         
