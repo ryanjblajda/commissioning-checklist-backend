@@ -151,7 +151,8 @@ def get_all_prefixes():
             payload = [{"id": item[0], "name": item[1], "description":item[2]} for item in results]
         
         if payload.count != 0:
-            print(payload)
+            #print(payload)
+            pass
 
     return payload
 
@@ -183,7 +184,8 @@ def get_all_models():
             payload = [{"id": item[2], "name": item[3],  "manufacturer_name":item[1], "manufacturer_id":item[0], "control_type_id":item[4], "control_type_name":item[5]} for item in results]
         
         if payload.count != 0:
-            print(payload)
+            #print(payload)
+            pass
 
     return payload
 
@@ -220,7 +222,8 @@ def get_manufacturers():
             payload = [{"id": item[0], "name": item[1]} for item in results]
         
         if payload.count != 0:
-            print(payload)
+            #print(payload)
+            pass
 
     return payload
 
@@ -241,7 +244,8 @@ def get_control_types():
             payload = [{"id": item[0], "name": item[1]} for item in results]
         
         if payload.count != 0:
-            print(payload)
+            #print(payload)
+            pass
 
     return payload
 
@@ -262,6 +266,7 @@ def get_tasks():
             payload = [{"id": item[0], "name": item[1], "description": item[2]} for item in results]
         
         if payload.count != 0:
-            print(payload)
+           #print(payload)
+           pass
 
     return payload
